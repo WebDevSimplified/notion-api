@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-+0n0xVW2eSR5OomGNYDnhzAbDsOXxcvSN1TPprVMTNDbiYZCxYbOOl7+AMvyTG2x" crossorigin="anonymous">
+  <script src="script.js" defer></script>
+  <title>Document</title>
+</head>
+<body>
+  <div class="container my-4">
+    <h1>WDS Video Suggestions</h1>
+    <form action="/create-suggestion" method="POST" class="border-bottom">
+      <div class="row">
+        <div class="col-12 col-md mb-3">
+          <label for="title">Title</label>
+          <input type="text" name="title" id="title" required class="form-control">
+        </div>
+        <div class="col-12 col-md mb-3">
+          <label for="tagIds">Tags</label>
+          <select name="tagIds" id="tagIds" class="form-select" multiple>
+            <% tags.forEach(tag => { %>
+              <option value="<%= tag.id %>"><%= tag.name %></option>
+            <% }) %>
+          </select>
+        </div>
+      </div>
+      <div class="mb-3">
+        <label for="description">Description</label>
+        <textarea name="description" id="description" class="form-control" required maxlength="500"></textarea>
+      </div>
+      <div class="form-check mb-3">
+        <input type="checkbox" name="isProject" id="isProject" class="form-check-input">
+        <label for="isProject" class="form-check-label">Project</label>
+      </div>
+      <button type="submit" class="btn btn-primary mb-3">Create New Suggestion</button>
+    </form>
+    <div class="row g-3 mt-3">
+      <% suggestions.forEach(suggestion => { %>
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3">
+          <div class="card" data-suggestion-id="<%= suggestion.id %>">
+            <div class="card-header d-flex justify-content-between align-items-center">
+              <div><%= suggestion.title %></div>
+              <div class="d-flex justify-content-center align-items-center">
+                <span class="me-2" data-up-vote-count><%= suggestion.votes %></span>
+                <button data-up-vote-btn class="px-1 py-0 btn btn-primary">+</button>
+              </div>
+            </div>
+            <div class="card-body">
+              <p><%= suggestion.description %></p>
+              <% if (suggestion.isProject) { %>
+                <div class="badge bg-primary rounded-pill">Project</div>
+              <% } %>
+              <% suggestion.tags.forEach(tag => { %>
+                <div class="badge bg-secondary rounded-pill">
+                  <%= tag.name %>
+                </div>
+              <% }) %>
+            </div>
+          </div>
+        </div>
+      <% }) %>
+    </div>
+  </div>
+</body>
+</html>
